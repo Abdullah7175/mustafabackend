@@ -28,10 +28,11 @@ const allowed = (process.env.CORS_ORIGIN || process.env.CLIENT_ORIGIN || "")
 
 // Add default allowed origins for common domains
 const defaultAllowed = [
-  'https://www.mtumrah.com',
-  'https://mtumrah.com',
-  'https://www.miqattravels.com',
-  'https://miqattravels.com'
+  'https://booking.mustafatravelsandtour.com',
+  'http://booking.mustafatravelsandtour.com:7000',
+  'http://34.224.169.168:7000',
+  'http://localhost:7000',
+  'http://0.0.0.0:7000'
 ];
 
 const allAllowed = [...new Set([...defaultAllowed, ...allowed])];

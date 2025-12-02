@@ -74,7 +74,7 @@ export const getBookingPdf = async (req, res) => {
     doc.fillColor('#ffffff')
        .fontSize(18)
        .font('Helvetica-Bold')
-       .text('MARWAH TRAVELS UMRAH', 50, 20, { align: 'center' });
+       .text('MUSTAFA TRAVEL', 50, 20, { align: 'center' });
     doc.fontSize(10)
        .font('Helvetica')
        .text(`Booking ID: ${booking._id}`, 50, 45, { align: 'center' });
@@ -88,7 +88,7 @@ export const getBookingPdf = async (req, res) => {
     doc.fontSize(8)
        .fillColor('#666666')
        .text(
-         'MARWAH TRAVELS UMRAH | Email: info@marwahtravels.com | Phone: +1-XXX-XXX-XXXX',
+         'MUSTAFA TRAVEL | Email: info@mustafatravel.com | Phone: +1-XXX-XXX-XXXX',
          50,
          bottomY,
          { align: 'center', width: doc.page.width - 100 }
