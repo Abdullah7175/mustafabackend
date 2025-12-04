@@ -4,14 +4,20 @@ import colors from 'colors';
 
 dotenv.config();
 
-// Old MongoDB connection
-const OLD_MONGO_URI = 'mongodb+srv://harryat5555_db_user:8H6LTAgxcuyZ9GgP@cluster0.vjjpkkd.mongodb.net/mtumrah-portal?retryWrites=true&w=majority&appName=Cluster0';
+// MongoDB connections - MUST be provided via environment variables
+const OLD_MONGO_URI = process.env.OLD_MONGO_URI;
+const NEW_MONGO_URI = process.env.MONGO_URI || process.env.NEW_MONGO_URI;
 
-// New MongoDB connection - read from environment variable or use default
-const NEW_MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://abdullah7175_db_user:4DgBRgRVQbsDB5BO@mustafa-travels.wni0vvg.mongodb.net/?retryWrites=true&w=majority&appName=mustafa-travels';
+if (!OLD_MONGO_URI) {
+  console.error('❌ OLD_MONGO_URI not found in .env file'.red);
+  console.error('   Please add OLD_MONGO_URI to your .env file'.gray);
+  process.exit(1);
+}
 
-if (!process.env.MONGO_URI) {
-  console.warn('⚠️  MONGO_URI not found in .env, using hardcoded connection string'.yellow);
+if (!NEW_MONGO_URI) {
+  console.error('❌ MONGO_URI or NEW_MONGO_URI not found in .env file'.red);
+  console.error('   Please add MONGO_URI to your .env file'.gray);
+  process.exit(1);
 }
 
 // Collections to migrate
@@ -27,8 +33,12 @@ async function migrateDatabase() {
     console.log('📡 Connecting to old database...'.yellow);
     oldClient = new MongoClient(OLD_MONGO_URI);
     await oldClient.connect();
-    const oldDb = oldClient.db('mtumrah-portal');
-    console.log('✅ Connected to old database'.green);
+    // Extract database name from connection string
+    // Format: mongodb+srv://...@host/database?...
+    const oldDbMatch = OLD_MONGO_URI.match(/mongodb\+srv:\/\/[^/]+\/([^?]+)/);
+    const oldDbName = oldDbMatch ? oldDbMatch[1] : 'mtumrah-portal';
+    const oldDb = oldClient.db(oldDbName);
+    console.log(`✅ Connected to old database: ${oldDbName}`.green);
 
     // Connect to new database
     console.log('📡 Connecting to new database...'.yellow);

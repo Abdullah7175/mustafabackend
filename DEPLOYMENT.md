@@ -109,7 +109,7 @@ JWT_SECRET=yourStrongSecretKey
 DEFAULT_COMPANY_ID=68ca6b8ecf042c6674756403
 PORT=7000
 HOST=0.0.0.0
-MONGO_URI=mongodb+srv://abdullah7175_db_user:4DgBRgRVQbsDB5BO@mustafa-travels.uxa9dzc.mongodb.net/?retryWrites=true&w=majority&appName=mustafa-travels
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster-host>/?retryWrites=true&w=majority&appName=mustafa-travels
 CORS_ORIGIN=https://booking.mustafatravelsandtour.com,http://booking.mustafatravelsandtour.com:7000,http://localhost:5173,http://127.0.0.1:5173
 CLIENT_ORIGIN=https://booking.mustafatravelsandtour.com,http://localhost:5173
 ```

@@ -22,24 +22,26 @@ MongoDB Atlas blocks connections from IPs that aren't whitelisted. You need to:
 
 ### 2. Verify Credentials
 
-Double-check the connection string:
-- Username: `abdullah7175_db_user`
-- Password: `NpMqQZKIfnneSrJb`
-- Cluster: `mustafa-travels.wni0vvg.mongodb.net`
+Double-check your connection string in the `.env` file:
+- Ensure `MONGO_URI` is set correctly
+- Verify the username and password are correct
+- Check the cluster hostname matches your MongoDB Atlas cluster
 
 ### 3. Database User Permissions
 
 Ensure the database user has the correct permissions:
 1. Go to MongoDB Atlas → Database Access
-2. Find the user `abdullah7175_db_user`
+2. Find your database user
 3. Ensure they have at least **Read and write to any database** permissions
 
 ### 4. Connection String Format
 
-The connection string should be:
+The connection string format should be:
 ```
-mongodb+srv://abdullah7175_db_user:NpMqQZKIfnneSrJb@mustafa-travels.wni0vvg.mongodb.net/?retryWrites=true&w=majority&appName=mustafa-travels
+mongodb+srv://<username>:<password>@<cluster-host>/<database>?retryWrites=true&w=majority&appName=<app-name>
 ```
+
+**Important:** Never commit credentials to the repository. Always use environment variables.
 
 If your password contains special characters, they may need to be URL-encoded:
 - `@` → `%40`
@@ -54,20 +56,31 @@ If your password contains special characters, they may need to be URL-encoded:
 You can test the connection using MongoDB Compass or the MongoDB shell:
 
 ```bash
-mongosh "mongodb+srv://abdullah7175_db_user:NpMqQZKIfnneSrJb@mustafa-travels.wni0vvg.mongodb.net/?retryWrites=true&w=majority&appName=mustafa-travels"
+# Load environment variables first
+source .env  # On Linux/Mac
+# or
+# Load .env manually on Windows
+
+# Then test connection
+mongosh "$MONGO_URI"
 ```
 
-### 6. Alternative: Use Environment Variable
+### 6. Environment Variables Setup
 
-Instead of hardcoding the connection string, you can use environment variables:
+**Always use environment variables for credentials. Never hardcode them in code.**
 
-1. Create/update `.env` file:
+1. Create/update `.env` file in the backend directory:
 ```env
-OLD_MONGO_URI=mongodb+srv://harryat5555_db_user:8H6LTAgxcuyZ9GgP@cluster0.vjjpkkd.mongodb.net/mtumrah-portal?retryWrites=true&w=majority&appName=Cluster0
-NEW_MONGO_URI=mongodb+srv://abdullah7175_db_user:NpMqQZKIfnneSrJb@mustafa-travels.wni0vvg.mongodb.net/?retryWrites=true&w=majority&appName=mustafa-travels
+# New MongoDB connection (current)
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster-host>/?retryWrites=true&w=majority&appName=mustafa-travels
+
+# Old MongoDB connection (for migration only)
+OLD_MONGO_URI=mongodb+srv://<username>:<password>@<cluster-host>/<database>?retryWrites=true&w=majority&appName=Cluster0
 ```
 
-2. Update the migration script to read from environment variables.
+2. Replace `<username>`, `<password>`, `<cluster-host>`, and `<database>` with your actual values.
+
+3. **Important:** Add `.env` to `.gitignore` to prevent committing credentials.
 
 ## Still Having Issues?
 

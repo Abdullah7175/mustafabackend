@@ -4,25 +4,19 @@
 
 The application has been updated to use the new MongoDB cluster for Mustafa Travel.
 
-### New Connection String
-
-```
-mongodb+srv://abdullah7175_db_user:NpMqQZKIfnneSrJb@mustafa-travels.wni0vvg.mongodb.net/?retryWrites=true&w=majority&appName=mustafa-travels
-```
-
 ### Update Environment Variable
 
 Update your `.env` file (or create one if it doesn't exist) with:
 
 ```env
-MONGO_URI=mongodb+srv://abdullah7175_db_user:NpMqQZKIfnneSrJb@mustafa-travels.wni0vvg.mongodb.net/?retryWrites=true&w=majority&appName=mustafa-travels
+# New MongoDB connection (current)
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster-host>/?retryWrites=true&w=majority&appName=mustafa-travels
+
+# Old MongoDB connection (for migration only - optional)
+OLD_MONGO_URI=mongodb+srv://<username>:<password>@<cluster-host>/<database>?retryWrites=true&w=majority&appName=Cluster0
 ```
 
-### Old Connection String (for reference)
-
-```
-mongodb+srv://harryat5555_db_user:8H6LTAgxcuyZ9GgP@cluster0.vjjpkkd.mongodb.net/mtumrah-portal?retryWrites=true&w=majority&appName=Cluster0
-```
+**Important:** Replace `<username>`, `<password>`, `<cluster-host>`, and `<database>` with your actual MongoDB Atlas credentials. Never commit credentials to the repository.
 
 ## Data Migration
 
