@@ -187,10 +187,10 @@ export const createInquiry = async (req, res) => {
 
 // Helper function to fetch external inquiries from mustafa travel API
 const fetchExternalInquiries = async () => {
-  // Try to get the API URL from environment or default to mustafatravel.com
+  // Try to get the API URL from environment or default to mustafatravelsandtour.com
   const externalApiUrl = process.env.EXTERNAL_INQUIRIES_API_URL || 
     process.env.MUSTAFA_TRAVEL_API_URL || 
-    'https://www.mustafatravel.com/api/inquiries';
+    'https://www.mustafatravelsandtour.com/api/inquiries';
   
   console.log(`Attempting to fetch external inquiries from: ${externalApiUrl}`);
   
