@@ -127,7 +127,8 @@ const BookingSchema = new mongoose.Schema(
     },
 
     // NEW FIELDS FROM REVISION
-    pnr: { type: String, minlength: 6, maxlength: 6 }, // optional at DB level; validate in controller when required
+    pnr: { type: String, minlength: 6, maxlength: 6 }, // optional at DB level; validate in controller when required (legacy single PNR)
+    pnrs: [{ type: String, minlength: 6, maxlength: 6 }], // Multiple PNRs support
 
     flights: {
       raw: String,           // pasted text

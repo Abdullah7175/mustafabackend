@@ -67,7 +67,11 @@ export const registerAgent = async (req, res) => {
       if (value.upsert) {
         agent.name = value.name ?? agent.name;
         agent.phone = typeof value.phone !== "undefined" ? value.phone : agent.phone;
-        agent.passwordHash = await bcrypt.hash(value.password, 12);
+        if (value.password) agent.passwordHash = await bcrypt.hash(value.password, 12);
+        if (typeof value.username !== "undefined") agent.username = value.username;
+        if (typeof value.department !== "undefined") agent.department = value.department;
+        if (typeof value.monthlyTarget !== "undefined") agent.monthlyTarget = value.monthlyTarget;
+        if (typeof value.commissionRate !== "undefined") agent.commissionRate = value.commissionRate;
         await agent.save();
         return res.status(200).json({
           ...sanitize(agent),

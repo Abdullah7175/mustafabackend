@@ -74,26 +74,28 @@ export const getBookingPdf = async (req, res) => {
     doc.fillColor('#ffffff')
        .fontSize(18)
        .font('Helvetica-Bold')
-       .text('MUSTAFA TRAVEL', 50, 20, { align: 'center' });
+       .text('MUSTAFA TRAVELS & TOUR', 50, 20, { align: 'center' });
     doc.fontSize(10)
        .font('Helvetica')
-       .text(`Booking ID: ${booking._id}`, 50, 45, { align: 'center' });
+       .text('Luxury Umrah Partner 🕋', 50, 35, { align: 'center' });
+    doc.fontSize(9)
+       .text(`Booking ID: ${booking._id}`, 50, 50, { align: 'center' });
     doc.fillColor('#000000');
     doc.moveDown(3);
   };
 
   // Helper function for footer
   const addFooter = () => {
-    const bottomY = doc.page.height - 40;
-    doc.fontSize(8)
+      const bottomY = doc.page.height - 40;
+      doc.fontSize(8)
        .fillColor('#666666')
        .text(
-         'MUSTAFA TRAVEL | Email: info@mustafatravel.com | Phone: +1-XXX-XXX-XXXX',
+         'info@mustafatravelsandtour.com | +1 845-359-3888 | www.mustafatravelsandtour.com',
          50,
          bottomY,
          { align: 'center', width: doc.page.width - 100 }
        );
-    doc.fillColor('#000000');
+      doc.fillColor('#000000');
   };
 
   // Add first page header
@@ -144,9 +146,18 @@ export const getBookingPdf = async (req, res) => {
   doc.fontSize(14).font('Helvetica-Bold').text('TRAVEL DATES', { underline: true });
   doc.moveDown(0.5);
   doc.fontSize(11).font('Helvetica');
-  doc.text(`Booking Date: ${booking.date ? new Date(booking.date).toISOString().slice(0, 10) : "—"}`);
-  doc.text(`Departure: ${booking.departureDate ? new Date(booking.departureDate).toISOString().slice(0, 10) : "—"}`);
-  doc.text(`Return: ${booking.returnDate ? new Date(booking.returnDate).toISOString().slice(0, 10) : "—"}`);
+  const formatBookingDate = (d: any) => {
+    if (!d) return "—";
+    try {
+      const date = d instanceof Date ? d : new Date(d);
+      return date.toISOString().slice(0, 10);
+    } catch {
+      return String(d).slice(0, 10) || "—";
+    }
+  };
+  doc.text(`Booking Date: ${formatBookingDate(booking.date)}`);
+  doc.text(`Departure: ${formatBookingDate(booking.departureDate)}`);
+  doc.text(`Return: ${formatBookingDate(booking.returnDate)}`);
   doc.text(`Package: ${booking.package || "—"}`);
   doc.moveDown(1.5);
 
@@ -166,7 +177,10 @@ export const getBookingPdf = async (req, res) => {
   const flightClass = booking.flight?.flightClass || booking.flightClass || 'economy';
   doc.text(`Class: ${flightClass}`);
   
-  if (booking.pnr) {
+  // Display PNR(s)
+  if (booking.pnrs && booking.pnrs.length > 0) {
+    doc.text(`PNR(s): ${booking.pnrs.join(', ')}`);
+  } else if (booking.pnr) {
     doc.text(`PNR: ${booking.pnr}`);
   }
   
@@ -508,6 +522,7 @@ export const createBooking = async (req, res) => {
 
       // revision sections (optional)
       pnr: pnr ? String(pnr).toUpperCase() : undefined,
+      pnrs: req.body.pnrs ? req.body.pnrs.map((p: string) => String(p).replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 6)).filter((p: string) => p.length === 6) : undefined,
       flights: flights || undefined,
       hotels: Array.isArray(hotels) ? hotels : undefined,
       visas: visas || undefined,
@@ -647,6 +662,18 @@ export const updateBooking = async (req, res) => {
         .json({ message: "PNR must be exactly 6 characters." });
     }
     booking.pnr = cleanPNR;
+  }
+  
+  // Handle multiple PNRs
+  if (req.body?.pnrs !== undefined) {
+    if (Array.isArray(req.body.pnrs)) {
+      const cleanPnrs = req.body.pnrs
+        .map((p: string) => String(p).replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 6))
+        .filter((p: string) => p.length === 6);
+      booking.pnrs = cleanPnrs.length > 0 ? cleanPnrs : undefined;
+    } else {
+      booking.pnrs = undefined;
+    }
   }
 
   // ORIGINAL FIELDS
