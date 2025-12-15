@@ -146,7 +146,7 @@ export const getBookingPdf = async (req, res) => {
   doc.fontSize(14).font('Helvetica-Bold').text('TRAVEL DATES', { underline: true });
   doc.moveDown(0.5);
   doc.fontSize(11).font('Helvetica');
-  const formatBookingDate = (d: any) => {
+  const formatBookingDate = (d) => {
     if (!d) return "—";
     try {
       const date = d instanceof Date ? d : new Date(d);
@@ -522,7 +522,7 @@ export const createBooking = async (req, res) => {
 
       // revision sections (optional)
       pnr: pnr ? String(pnr).toUpperCase() : undefined,
-      pnrs: req.body.pnrs ? req.body.pnrs.map((p: string) => String(p).replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 6)).filter((p: string) => p.length === 6) : undefined,
+      pnrs: req.body.pnrs ? req.body.pnrs.map((p) => String(p).replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 6)).filter((p) => p.length === 6) : undefined,
       flights: flights || undefined,
       hotels: Array.isArray(hotels) ? hotels : undefined,
       visas: visas || undefined,
@@ -668,8 +668,8 @@ export const updateBooking = async (req, res) => {
   if (req.body?.pnrs !== undefined) {
     if (Array.isArray(req.body.pnrs)) {
       const cleanPnrs = req.body.pnrs
-        .map((p: string) => String(p).replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 6))
-        .filter((p: string) => p.length === 6);
+        .map((p) => String(p).replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 6))
+        .filter((p) => p.length === 6);
       booking.pnrs = cleanPnrs.length > 0 ? cleanPnrs : undefined;
     } else {
       booking.pnrs = undefined;
